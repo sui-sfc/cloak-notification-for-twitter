@@ -45,7 +45,8 @@ client = tweepy.Client(
 #チケット情報送信
 def SendMessage(ticket_info):
     client.create_tweet(text=s_message(ticket_info))
-
+    f_write(ticket_info)
+    print('posted')
 #ログイン
 
 def on_ready():
@@ -58,15 +59,13 @@ def on_ready():
         if latast_data == ticket_info:
             pass
         else:
-            f_write(ticket_info)
-            client.create_tweet(text=s_message(ticket_info))
+            SendMessage(ticket_info)
     #存在しなかった時
     except FileNotFoundError:
         print('初回起動')
         ticket_info = get_info.get_cloak_ticket_info(url, 1)
-        client.create_tweet(text=s_message(ticket_info))
-        f_write(ticket_info)
-    #共にする処理
+        SendMessage(ticket_info)
+        f_write(ticket_info)    #共にする処理
     print('run')
     while(1):
         timeloop()
@@ -81,8 +80,8 @@ def timeloop():
         if latast_data == ticket_info:
             pass
         else:
-            f_write(ticket_info)
-            client.create_tweet(text=s_message(ticket_info))
+            SendMessage(ticket_info)
+            print('posted')
     except:
         pass
     time.sleep(30)
