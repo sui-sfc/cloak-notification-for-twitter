@@ -1,5 +1,5 @@
 import json
-from time import time
+import time
 import get_info
 import tweepy
 import tokens
@@ -75,12 +75,17 @@ def on_ready():
 #無限ループ
 def timeloop():
     print('loop')
-    latast_data = f_read()
-    ticket_info = get_info.get_cloak_ticket_info(url, 1)
-    if latast_data == ticket_info:
+    try:
+        latast_data = f_read()
+        ticket_info = get_info.get_cloak_ticket_info(url, 1)
+        if latast_data == ticket_info:
+            pass
+        else:
+            f_write(ticket_info)
+            client.create_tweet(text=s_message(ticket_info))
+    except:
         pass
-    else:
-        f_write(ticket_info)
-        client.create_tweet(text=s_message(ticket_info))
-
+    time.sleep(30)
+    
+    
 on_ready()
